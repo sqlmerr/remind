@@ -1,10 +1,10 @@
 [package]
 name = "remind-core"
-version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 async-trait.workspace = true
-sea-query = { version = "0.32.6", features = ["uuid", "derive"] }
 sqlx = { version = "0.8.6", features = ["derive", "uuid", "runtime-tokio", "postgres", "migrate"] }
 uuid.workspace = true
+thiserror.workspace = true
+remind-auth.workspace = true

@@ -15,6 +15,18 @@ pub struct UserCreateDTO {
     pub password: String,
 }
 
+#[derive(Debug, Clone)]
+pub struct UserLoginUsernameDTO {
+    pub username: String,
+    pub password: String,
+}
+
+#[derive(Debug, Clone)]
+pub struct UserLoginEmailDTO {
+    pub email: String,
+    pub password: String,
+}
+
 
 impl From<User> for UserDTO {
     fn from(value: User) -> Self {

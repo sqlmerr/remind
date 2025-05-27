@@ -1,8 +1,18 @@
+pub mod routes;
+pub mod state;
+pub mod config;
+pub mod schemas;
+pub mod errors;
+
+use serde_json::json;
 use axum::extract::Request;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-use axum::Router;
+use axum::{Json, Router};
 use axum::routing::get;
 use tower_http::trace::TraceLayer;
+use remind_core::PgPoolOptions;
+use crate::config::Config;
+use crate::state::AppState;
 
 #[tokio::main]
 async fn main() {
@@ -19,10 +29,14 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
+    let config = Config::from_env();
+    let db_pool = PgPoolOptions::new()
+        .max_connections(5)
+        .connect(config.database_url.as_str()).await.unwrap();
+    let state = AppState::new(db_pool, config);
+
     let router = Router::new()
         .layer(TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
-            // Log the matched route's path (with placeholders not filled in).
-            // Use request.uri() or OriginalUri if you want the real path.
             let matched_path = request
                 .extensions()
                 .get::<axum::extract::MatchedPath>()
@@ -35,7 +49,10 @@ async fn main() {
                         some_other_field = tracing::field::Empty,
                     )
         }))
-        .route("/", get(|| async { "Hello, world!" }));
+        .route("/", get(|| async { Json(json!({"message": "Hello, world!", "ok": true}) ) }))
+        .nest("/auth", routes::auth::router(state.clone()))
+        .fallback(routes::handler_404)
+        .with_state(state);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8000").await.unwrap();
     let addr = listener.local_addr().unwrap();

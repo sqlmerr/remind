@@ -1,0 +1,10 @@
+[package]
+name = "remind-auth"
+edition = "2024"
+
+[dependencies]
+argon2 = "0.5.3"
+jsonwebtoken = "9.3.1"
+thiserror.workspace = true
+serde.workspace = true
+chrono.workspace = true
