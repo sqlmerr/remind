@@ -1,0 +1,12 @@
+[package]
+name = "remind-api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tracing.workspace = true
+remind-core.workspace = true
+tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
+axum = "0.8.4"
+tokio = { version = "1.45.1", features = ["full"] }
+tower-http = { version = "0.6.1", features = ["trace"] }
