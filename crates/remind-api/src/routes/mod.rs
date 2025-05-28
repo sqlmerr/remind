@@ -11,6 +11,7 @@ use crate::errors::ApiError;
 use crate::state::AppState;
 
 pub(crate) mod auth;
+pub(crate) mod workspace;
 
 pub async fn handler_404() -> impl IntoResponse {
     (axum::http::StatusCode::NOT_FOUND, Json(json!({"message": "Not found", "status_code": 404})))

@@ -32,7 +32,8 @@ impl IntoResponse for ApiError {
                         }
                     }
                     CoreError::ServerError => (StatusCode::INTERNAL_SERVER_ERROR, msg),
-                    CoreError::NotFound => (StatusCode::NOT_FOUND, msg)
+                    CoreError::NotFound => (StatusCode::NOT_FOUND, msg),
+                    CoreError::TooManyWorkspaces => (StatusCode::FORBIDDEN, msg)
                 }
             }
         };

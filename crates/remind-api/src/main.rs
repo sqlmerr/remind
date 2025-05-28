@@ -51,6 +51,7 @@ async fn main() {
         }))
         .route("/", get(|| async { Json(json!({"message": "Hello, world!", "ok": true}) ) }))
         .nest("/auth", routes::auth::router(state.clone()))
+        .nest("/workspaces", routes::workspace::router(state.clone()))
         .fallback(routes::handler_404)
         .with_state(state);
 

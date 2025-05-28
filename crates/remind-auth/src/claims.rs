@@ -13,7 +13,7 @@ impl Claims {
     pub fn new(username: String) -> Self {
         Self {
             sub: username,
-            exp: (Utc::now() + Duration::minutes(30)).timestamp() as usize,
+            exp: (Utc::now() + Duration::days(1)).timestamp() as usize,
         }
     }
 }

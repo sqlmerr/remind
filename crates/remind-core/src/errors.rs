@@ -10,7 +10,9 @@ pub enum CoreError {
     #[error("Server error")]
     ServerError,
     #[error("Not found")]
-    NotFound
+    NotFound,
+    #[error("User have reached the limit of create workspaces (3)")]
+    TooManyWorkspaces
 }
 
 pub type Result<T> = std::result::Result<T, CoreError>;
