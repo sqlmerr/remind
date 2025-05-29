@@ -1489,6 +1489,8 @@ version = "0.0.0"
 dependencies = [
  "async-trait",
  "remind-auth",
+ "serde",
+ "serde_json",
  "sqlx",
  "thiserror",
  "uuid",

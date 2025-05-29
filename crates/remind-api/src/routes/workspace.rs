@@ -1,16 +1,20 @@
-use axum::extract::State;
+use axum::extract::{Path, State};
 use axum::{Extension, Json, Router};
 use axum::routing::{get, post};
+use uuid::Uuid;
 use remind_core::{UserDTO, WorkspaceCreateDTO};
+use remind_core::errors::CoreError;
 use crate::schemas::workspace::{CreateWorkspaceSchema, WorkspaceSchema};
 use crate::state::AppState;
 use crate::errors::Result;
 use crate::schemas::DataResponseSchema;
+use crate::schemas::note::NoteSchema;
 
 pub(crate) fn router(state: AppState) -> Router<AppState> {
     Router::new()
         .route("/", post(create_workspace))
         .route("/my", get(get_my_workspaces))
+        .route("/my/{id}/notes", get(get_my_workspace_notes))
         .layer(axum::middleware::from_fn_with_state(state, super::auth_middleware))
 }
 
@@ -31,4 +35,21 @@ async fn get_my_workspaces(
         .await?.iter().map(|w| WorkspaceSchema::from(w.clone())).collect();
     
     Ok(Json(DataResponseSchema(workspaces)))
+}
+
+async fn get_my_workspace_notes(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+    Extension(user): Extension<UserDTO>
+) -> Result<Json<DataResponseSchema<Vec<NoteSchema>>>> {
+    let workspace = state.workspace_service.get(id).await?;
+    if workspace.user_id != user.id {
+        return Err(CoreError::DontHaveAccess.into())
+    }
+    
+    let notes = state.note_service.get_all_in_workspace(workspace.id)
+        .await?
+        .iter().map(|n| NoteSchema::from(n.clone())).collect();
+    
+    Ok(Json(DataResponseSchema(notes)))
 }

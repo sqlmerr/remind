@@ -4,7 +4,9 @@ edition = "2024"
 
 [dependencies]
 async-trait.workspace = true
-sqlx = { version = "0.8.6", features = ["derive", "uuid", "runtime-tokio", "postgres", "migrate"] }
+sqlx = { version = "0.8.6", features = ["derive", "uuid", "runtime-tokio", "postgres", "migrate", "json"] }
+serde_json = { version = "1.0.140", features = ["raw_value"] }
+serde.workspace = true
 uuid.workspace = true
 thiserror.workspace = true
 remind-auth.workspace = true

@@ -4,7 +4,8 @@ use serde::ser::SerializeStruct;
 pub mod user;
 pub mod auth;
 pub mod workspace;
-
+pub mod note;
+pub mod block;
 
 pub struct DataResponseSchema<T: Serialize>(pub T);
 
