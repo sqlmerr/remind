@@ -1,28 +1,35 @@
-use uuid::Uuid;
-use remind_auth::{hash_password, verify_password, Claims, JwtProcessor};
-use crate::repositories::user::UserRepo;
-use crate::{User, UserCreateDTO, UserDTO, UserLoginEmailDTO, UserLoginUsernameDTO};
 use crate::errors::AuthError;
 use crate::errors::CoreError;
 use crate::errors::Result;
+use crate::repositories::user::UserRepo;
+use crate::{User, UserCreateDTO, UserDTO, UserLoginEmailDTO, UserLoginUsernameDTO};
+use remind_auth::{Claims, JwtProcessor, hash_password, verify_password};
+use uuid::Uuid;
 
 #[derive(Clone)]
 pub struct UserService<R: UserRepo> {
     repo: R,
-    jwt_processor: JwtProcessor
+    jwt_processor: JwtProcessor,
 }
 
 impl<R: UserRepo> UserService<R> {
     pub fn new(repo: R, jwt_processor: JwtProcessor) -> Self {
-        Self { repo, jwt_processor }
+        Self {
+            repo,
+            jwt_processor,
+        }
     }
 
     pub async fn register(&self, data: UserCreateDTO) -> Result<UserDTO> {
-        if let Some(_) = self.repo.find_one_by_username(data.username.clone()).await? {
-            return Err(AuthError::UsernameOccupied.into())
+        if let Some(_) = self
+            .repo
+            .find_one_by_username(data.username.clone())
+            .await?
+        {
+            return Err(AuthError::UsernameOccupied.into());
         };
         if let Some(_) = self.repo.find_one_by_email(data.email.clone()).await? {
-            return Err(AuthError::EmailExists.into())
+            return Err(AuthError::EmailExists.into());
         };
         let password = hash_password(data.password.as_ref()).map_err(|_| CoreError::ServerError)?;
         let user = User {
@@ -41,7 +48,7 @@ impl<R: UserRepo> UserService<R> {
         let user = self.repo.find_one(id).await?;
         match user {
             None => Err(CoreError::NotFound),
-            Some(usr) => Ok(usr.into())
+            Some(usr) => Ok(usr.into()),
         }
     }
 
@@ -49,12 +56,15 @@ impl<R: UserRepo> UserService<R> {
         let user = self.repo.find_one_by_username(username).await?;
         match user {
             None => Err(CoreError::NotFound),
-            Some(usr) => Ok(usr.into())
+            Some(usr) => Ok(usr.into()),
         }
     }
 
     pub async fn login_by_username(&self, data: UserLoginUsernameDTO) -> Result<String> {
-        let user = self.repo.find_one_by_username(data.username.clone()).await?;
+        let user = self
+            .repo
+            .find_one_by_username(data.username.clone())
+            .await?;
         if user.is_none() {
             return Err(AuthError::WrongCredentials.into());
         }

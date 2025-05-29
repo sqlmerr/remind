@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use remind_core::{UserCreateDTO, UserLoginEmailDTO, UserLoginUsernameDTO};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RegisterUserSchema {

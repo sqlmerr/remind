@@ -1,11 +1,11 @@
-use serde::{Serialize, Serializer};
 use serde::ser::SerializeStruct;
+use serde::{Serialize, Serializer};
 
-pub mod user;
 pub mod auth;
-pub mod workspace;
-pub mod note;
 pub mod block;
+pub mod note;
+pub mod user;
+pub mod workspace;
 
 pub struct DataResponseSchema<T: Serialize>(pub T);
 

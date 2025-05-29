@@ -1,6 +1,6 @@
-use serde::{Serialize, Deserialize};
-use uuid::Uuid;
 use remind_core::UserDTO;
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct UserSchema {
@@ -18,5 +18,3 @@ impl From<UserDTO> for UserSchema {
         }
     }
 }
-
-

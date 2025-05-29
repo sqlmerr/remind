@@ -1,6 +1,6 @@
+use crate::Note;
 use async_trait::async_trait;
 use uuid::Uuid;
-use crate::Note;
 
 #[async_trait]
 pub trait NoteRepo {
@@ -25,16 +25,21 @@ impl NoteRepository {
 #[async_trait]
 impl NoteRepo for NoteRepository {
     async fn create(&self, data: Note) -> crate::errors::Result<()> {
-        sqlx::query!("INSERT INTO notes(id, title, workspace_id)  VALUES ($1, $2, $3)", data.id, data.title, data.workspace_id).execute(&self.pool).await?;
+        sqlx::query!(
+            "INSERT INTO notes(id, title, workspace_id)  VALUES ($1, $2, $3)",
+            data.id,
+            data.title,
+            data.workspace_id
+        )
+        .execute(&self.pool)
+        .await?;
         Ok(())
     }
 
     async fn find_one(&self, id: Uuid) -> crate::errors::Result<Option<Note>> {
-        let note = sqlx::query_as!(
-            Note,
-            r#"SELECT * FROM notes WHERE id = $1"#,
-            id
-        ).fetch_optional(&self.pool).await?;
+        let note = sqlx::query_as!(Note, r#"SELECT * FROM notes WHERE id = $1"#, id)
+            .fetch_optional(&self.pool)
+            .await?;
         Ok(note)
     }
 
@@ -43,16 +48,17 @@ impl NoteRepo for NoteRepository {
             Note,
             r#"SELECT * FROM notes WHERE workspace_id = $1"#,
             workspace_id
-        ).fetch_all(&self.pool).await?;
-        
+        )
+        .fetch_all(&self.pool)
+        .await?;
+
         Ok(notes)
     }
 
     async fn delete(&self, id: Uuid) -> crate::errors::Result<()> {
-        sqlx::query!(
-            r#"DELETE FROM notes WHERE id = $1"#,
-            id
-        ).execute(&self.pool).await?;
+        sqlx::query!(r#"DELETE FROM notes WHERE id = $1"#, id)
+            .execute(&self.pool)
+            .await?;
         Ok(())
     }
 
@@ -62,7 +68,9 @@ impl NoteRepo for NoteRepository {
             data.id,
             data.title,
             data.workspace_id
-        ).execute(&self.pool).await?;
+        )
+        .execute(&self.pool)
+        .await?;
         Ok(())
     }
 }

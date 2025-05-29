@@ -1,6 +1,9 @@
-use remind_core::{BlockRepository, BlockService, NoteRepository, NoteService, PgPool, UserRepository, UserService, WorkspaceRepository, WorkspaceService};
-use remind_core::remind_auth::{DecodingKey, EncodingKey, JwtProcessor};
 use crate::config::Config;
+use remind_core::remind_auth::{DecodingKey, EncodingKey, JwtProcessor};
+use remind_core::{
+    BlockRepository, BlockService, NoteRepository, NoteService, PgPool, UserRepository,
+    UserService, WorkspaceRepository, WorkspaceService,
+};
 
 #[derive(Clone)]
 pub struct AppState {
@@ -16,13 +19,13 @@ impl AppState {
     pub fn new(pg_pool: PgPool, config: Config) -> Self {
         let user_repo = UserRepository::new(pg_pool.clone());
         let jwt_processor = JwtProcessor::new(
-            EncodingKey::from_secret(config.jwt_secret.as_ref()), 
-            DecodingKey::from_secret(config.jwt_secret.as_ref())
+            EncodingKey::from_secret(config.jwt_secret.as_ref()),
+            DecodingKey::from_secret(config.jwt_secret.as_ref()),
         );
         let user_service = UserService::new(user_repo, jwt_processor.clone());
         let workspace_repo = WorkspaceRepository::new(pg_pool.clone());
         let workspace_service = WorkspaceService::new(workspace_repo);
-        
+
         let block_repo = BlockRepository::new(pg_pool.clone());
         let block_service = BlockService::new(block_repo.clone());
         let note_repo = NoteRepository::new(pg_pool.clone());
@@ -33,7 +36,7 @@ impl AppState {
             jwt_processor,
             workspace_service,
             block_service,
-            note_service
+            note_service,
         }
     }
 }

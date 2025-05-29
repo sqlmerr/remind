@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
-use sqlx::types::Json;
 use sqlx::Row;
+use sqlx::types::Json;
 use uuid::Uuid;
 
 #[derive(Clone, Debug, sqlx::Type, PartialEq, Deserialize, Serialize)]
@@ -9,16 +9,16 @@ pub enum BlockType {
     PlainText,
     Checkbox,
     Image,
-    Code
+    Code,
 }
 
 impl BlockType {
     pub fn as_str(&self) -> &'static str {
-        match self { 
+        match self {
             BlockType::PlainText => "PlainText",
             BlockType::Checkbox => "Checkbox",
             BlockType::Image => "Image",
-            BlockType::Code => "Code"
+            BlockType::Code => "Code",
         }
     }
 }
@@ -31,7 +31,7 @@ pub struct PlainTextContent {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CheckboxContent {
     pub text: String,
-    pub status: String
+    pub status: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -60,7 +60,7 @@ pub struct Block {
     pub block_type: BlockType,
     pub content: BlockContent,
     pub note_id: Uuid,
-    pub position: i32
+    pub position: i32,
 }
 
 impl<'r> sqlx::FromRow<'r, sqlx::postgres::PgRow> for Block {
@@ -98,10 +98,9 @@ impl<'r> sqlx::FromRow<'r, sqlx::postgres::PgRow> for Block {
                 note_id,
                 block_type,
                 content: content.0,
-                position
+                position,
             }),
             _ => Err(sqlx::Error::RowNotFound),
         }
     }
 }
-

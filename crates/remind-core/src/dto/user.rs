@@ -1,5 +1,5 @@
-use uuid::Uuid;
 use crate::User;
+use uuid::Uuid;
 
 #[derive(Clone, Debug)]
 pub struct UserDTO {
@@ -26,7 +26,6 @@ pub struct UserLoginEmailDTO {
     pub email: String,
     pub password: String,
 }
-
 
 impl From<User> for UserDTO {
     fn from(value: User) -> Self {

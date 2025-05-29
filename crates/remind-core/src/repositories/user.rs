@@ -1,7 +1,7 @@
-use async_trait::async_trait;
-use uuid::Uuid;
 use crate::User;
 use crate::errors::Result;
+use async_trait::async_trait;
+use uuid::Uuid;
 
 #[async_trait]
 pub trait UserRepo {
@@ -34,7 +34,9 @@ impl UserRepo for UserRepository {
             data.username,
             data.email,
             data.password
-        ).execute(&self.pool).await?;
+        )
+        .execute(&self.pool)
+        .await?;
 
         Ok(())
     }
@@ -51,14 +53,14 @@ impl UserRepo for UserRepository {
             .await?;
         Ok(user)
     }
-    
+
     async fn find_one_by_email(&self, email: String) -> Result<Option<User>> {
         let user = sqlx::query_as!(User, r#"SELECT * FROM users WHERE email = $1"#, email)
             .fetch_optional(&self.pool)
             .await?;
         Ok(user)
     }
-    
+
     async fn find_all(&self) -> Result<Vec<User>> {
         todo!()
     }
@@ -72,12 +74,14 @@ impl UserRepo for UserRepository {
 
     async fn save(&self, data: User) -> Result<()> {
         sqlx::query!(
-            r#"UPDATE users SET username = $2, email = $3, password = $4 WHERE id = $1"#, 
-            data.id, 
-            data.username, 
+            r#"UPDATE users SET username = $2, email = $3, password = $4 WHERE id = $1"#,
+            data.id,
+            data.username,
             data.email,
             data.password
-        ).execute(&self.pool).await?;
+        )
+        .execute(&self.pool)
+        .await?;
         Ok(())
     }
 }

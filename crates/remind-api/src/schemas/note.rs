@@ -1,14 +1,14 @@
+use crate::schemas::block::BlockSchema;
+use remind_core::{NoteCreateDTO, NoteDTO};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use remind_core::{NoteCreateDTO, NoteDTO};
-use crate::schemas::block::BlockSchema;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct NoteSchema {
     pub id: Uuid,
     pub title: String,
     pub workspace_id: Uuid,
-    pub blocks: Vec<BlockSchema>
+    pub blocks: Vec<BlockSchema>,
 }
 
 impl From<NoteDTO> for NoteSchema {
@@ -17,7 +17,11 @@ impl From<NoteDTO> for NoteSchema {
             id: value.id,
             title: value.title,
             workspace_id: value.workspace_id,
-            blocks: value.blocks.iter().map(|b| BlockSchema::from(b.clone())).collect()
+            blocks: value
+                .blocks
+                .iter()
+                .map(|b| BlockSchema::from(b.clone()))
+                .collect(),
         }
     }
 }
@@ -25,14 +29,14 @@ impl From<NoteDTO> for NoteSchema {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct CreateNoteSchema {
     pub title: String,
-    pub workspace_id: Uuid
+    pub workspace_id: Uuid,
 }
 
 impl From<CreateNoteSchema> for NoteCreateDTO {
     fn from(value: CreateNoteSchema) -> Self {
         Self {
             title: value.title,
-            workspace_id: value.workspace_id
+            workspace_id: value.workspace_id,
         }
     }
 }

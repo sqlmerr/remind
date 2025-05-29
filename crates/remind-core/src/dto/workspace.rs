@@ -1,5 +1,5 @@
-use uuid::Uuid;
 use crate::Workspace;
+use uuid::Uuid;
 
 #[derive(Debug, Clone)]
 pub struct WorkspaceDTO {
@@ -19,7 +19,7 @@ impl From<Workspace> for WorkspaceDTO {
         Self {
             id: value.id,
             user_id: value.user_id,
-            title: value.title
+            title: value.title,
         }
     }
 }

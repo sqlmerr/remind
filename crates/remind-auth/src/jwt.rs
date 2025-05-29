@@ -1,9 +1,9 @@
 use crate::claims::Claims;
 
-use jsonwebtoken::{
-    decode, encode, errors::Result, DecodingKey, EncodingKey, Header, TokenData, Validation,
-};
 use crate::AuthError;
+use jsonwebtoken::{
+    DecodingKey, EncodingKey, Header, TokenData, Validation, decode, encode, errors::Result,
+};
 
 pub fn create_token(claims: &Claims, key: &EncodingKey) -> Result<String> {
     encode(&Header::default(), claims, key)

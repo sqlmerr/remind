@@ -1,5 +1,5 @@
-use thiserror::Error;
 pub use remind_auth::AuthError;
+use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum CoreError {
@@ -14,7 +14,7 @@ pub enum CoreError {
     #[error("User have reached the limit of create workspaces (3)")]
     TooManyWorkspaces,
     #[error("You don't have access to do it")]
-    DontHaveAccess
+    DontHaveAccess,
 }
 
 pub type Result<T> = std::result::Result<T, CoreError>;

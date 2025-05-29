@@ -1,6 +1,6 @@
+use crate::Workspace;
 use async_trait::async_trait;
 use uuid::Uuid;
-use crate::Workspace;
 
 #[async_trait]
 pub trait WorkspaceRepo {
@@ -26,21 +26,21 @@ impl WorkspaceRepository {
 impl WorkspaceRepo for WorkspaceRepository {
     async fn create(&self, data: Workspace) -> crate::errors::Result<()> {
         sqlx::query!(
-            r#"INSERT INTO workspaces (id, title, user_id) VALUES ($1, $2, $3)"#, 
+            r#"INSERT INTO workspaces (id, title, user_id) VALUES ($1, $2, $3)"#,
             data.id,
             data.title,
             data.user_id
-        ).execute(&self.pool).await?;
+        )
+        .execute(&self.pool)
+        .await?;
 
         Ok(())
     }
 
     async fn find_one(&self, id: Uuid) -> crate::errors::Result<Option<Workspace>> {
-        let workspace = sqlx::query_as!(
-            Workspace, 
-            r#"SELECT * FROM workspaces WHERE id = $1"#,
-            id
-        ).fetch_optional(&self.pool).await?;
+        let workspace = sqlx::query_as!(Workspace, r#"SELECT * FROM workspaces WHERE id = $1"#, id)
+            .fetch_optional(&self.pool)
+            .await?;
         Ok(workspace)
     }
 
@@ -49,20 +49,28 @@ impl WorkspaceRepo for WorkspaceRepository {
             Workspace,
             r#"SELECT * FROM workspaces WHERE user_id = $1"#,
             user_id
-        ).fetch_all(&self.pool).await?;
+        )
+        .fetch_all(&self.pool)
+        .await?;
         Ok(workspaces)
     }
 
     async fn delete(&self, id: Uuid) -> crate::errors::Result<()> {
-        sqlx::query!(r#"DELETE FROM workspaces WHERE id = $1"#, id).execute(&self.pool).await?;
+        sqlx::query!(r#"DELETE FROM workspaces WHERE id = $1"#, id)
+            .execute(&self.pool)
+            .await?;
         Ok(())
     }
 
     async fn save(&self, data: Workspace) -> crate::errors::Result<()> {
         sqlx::query!(
             r#"UPDATE workspaces SET title = $2, user_id = $3 WHERE id = $1"#,
-            data.id, data.title, data.user_id
-        ).execute(&self.pool).await?;
+            data.id,
+            data.title,
+            data.user_id
+        )
+        .execute(&self.pool)
+        .await?;
         Ok(())
     }
 }

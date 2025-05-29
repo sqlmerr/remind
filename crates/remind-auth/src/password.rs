@@ -1,10 +1,8 @@
 use argon2::{
-    password_hash::{
-        rand_core::OsRng,
-        PasswordHash, PasswordHasher, SaltString, PasswordVerifier,
-        Result
-    },
     Argon2,
+    password_hash::{
+        PasswordHash, PasswordHasher, PasswordVerifier, Result, SaltString, rand_core::OsRng,
+    },
 };
 
 pub fn hash_password(password: &[u8]) -> Result<String> {

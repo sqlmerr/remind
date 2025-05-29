@@ -1,12 +1,14 @@
-pub(crate) mod services;
-pub(crate) mod repositories;
 pub(crate) mod dto;
 mod entities;
 pub mod errors;
+pub(crate) mod repositories;
+pub(crate) mod services;
 
-pub use dto::{user::*, workspace::*, block::*, note::*};
-pub use entities::{user::User, workspace::Workspace, block::*, note::Note};
-pub use repositories::{user::*, workspace::*, note::*, block::*};
-pub use services::{user::UserService, workspace::WorkspaceService, block::BlockService, note::NoteService};
-pub use sqlx::{PgPool, postgres::PgPoolOptions};
+pub use dto::{block::*, note::*, user::*, workspace::*};
+pub use entities::{block::*, note::Note, user::User, workspace::Workspace};
 pub use remind_auth;
+pub use repositories::{block::*, note::*, user::*, workspace::*};
+pub use services::{
+    block::BlockService, note::NoteService, user::UserService, workspace::WorkspaceService,
+};
+pub use sqlx::{PgPool, postgres::PgPoolOptions};
