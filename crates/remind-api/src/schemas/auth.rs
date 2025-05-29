@@ -1,9 +1,11 @@
 use remind_core::{UserCreateDTO, UserLoginEmailDTO, UserLoginUsernameDTO};
 use serde::{Deserialize, Serialize};
+use validator::Validate;
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Validate)]
 pub struct RegisterUserSchema {
     pub username: String,
+    #[validate(email)]
     pub email: String,
     pub password: String,
 }
@@ -14,8 +16,9 @@ pub struct LoginByUsernameSchema {
     pub password: String,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Validate)]
 pub struct LoginByEmailSchema {
+    #[validate(email)]
     pub email: String,
     pub password: String,
 }

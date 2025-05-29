@@ -14,7 +14,7 @@ pub enum CoreError {
     #[error("User have reached the limit of create workspaces (3)")]
     TooManyWorkspaces,
     #[error("You don't have access to do it")]
-    DontHaveAccess,
+    AccessDenied,
 }
 
 pub type Result<T> = std::result::Result<T, CoreError>;

@@ -24,7 +24,7 @@ async fn add_block(
     let note = state.note_service.find_one(data.note_id).await?;
     let workspace = state.workspace_service.get(note.workspace_id).await?;
     if user.id != workspace.user_id {
-        return Err(CoreError::DontHaveAccess.into());
+        return Err(CoreError::AccessDenied.into());
     }
     let block = state.block_service.create(data.into()).await?;
     Ok(Json(block.into()))

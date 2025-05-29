@@ -3,6 +3,7 @@ pub mod errors;
 pub mod routes;
 pub mod schemas;
 pub mod state;
+pub mod utils;
 
 use crate::config::Config;
 use crate::state::AppState;

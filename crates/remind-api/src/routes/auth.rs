@@ -4,6 +4,7 @@ use crate::schemas::auth::{
 };
 use crate::schemas::user::UserSchema;
 use crate::state::AppState;
+use crate::utils::validator::ValidatedJson;
 use axum::extract::State;
 use axum::routing::{get, post};
 use axum::{Extension, Json, Router};
@@ -25,7 +26,7 @@ pub(crate) fn router(state: AppState) -> Router<AppState> {
 
 async fn register(
     State(state): State<AppState>,
-    Json(data): Json<RegisterUserSchema>,
+    ValidatedJson(data): ValidatedJson<RegisterUserSchema>,
 ) -> Result<Json<UserSchema>> {
     let dto = data.into();
     let response = state.user_service.register(dto).await?;
@@ -47,7 +48,7 @@ async fn login_by_username(
 
 async fn login_by_email(
     State(state): State<AppState>,
-    Json(data): Json<LoginByEmailSchema>,
+    ValidatedJson(data): ValidatedJson<LoginByEmailSchema>,
 ) -> Result<Json<AuthTokenSchema>> {
     let dto = data.into();
     let token = state.user_service.login_by_email(dto).await?;

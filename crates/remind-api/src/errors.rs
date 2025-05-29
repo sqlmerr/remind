@@ -1,13 +1,19 @@
 use axum::Json;
+use axum::extract::rejection::JsonRejection;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use remind_core::errors::{AuthError, CoreError};
 use serde_json::json;
+use validator::ValidationErrors;
 
 #[derive(Debug, thiserror::Error)]
 pub enum ApiError {
     #[error(transparent)]
     CoreError(#[from] CoreError),
+    #[error(transparent)]
+    ValidationError(#[from] ValidationErrors),
+    #[error(transparent)]
+    AxumJsonRejection(#[from] JsonRejection),
 }
 
 pub type Result<T> = core::result::Result<T, ApiError>;
@@ -33,8 +39,13 @@ impl IntoResponse for ApiError {
                 CoreError::ServerError => (StatusCode::INTERNAL_SERVER_ERROR, msg),
                 CoreError::NotFound => (StatusCode::NOT_FOUND, msg),
                 CoreError::TooManyWorkspaces => (StatusCode::FORBIDDEN, msg),
-                CoreError::DontHaveAccess => (StatusCode::FORBIDDEN, msg),
+                CoreError::AccessDenied => (StatusCode::FORBIDDEN, msg),
             },
+            Self::ValidationError(_) => (
+                StatusCode::BAD_REQUEST,
+                format!("Validation errors: [{}]", self).replace('\n', ","),
+            ),
+            _ => (StatusCode::BAD_REQUEST, msg),
         };
 
         (

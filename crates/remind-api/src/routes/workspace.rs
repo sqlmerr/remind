@@ -58,7 +58,7 @@ async fn get_my_workspace_notes(
 ) -> Result<Json<DataResponseSchema<Vec<NoteSchema>>>> {
     let workspace = state.workspace_service.get(id).await?;
     if workspace.user_id != user.id {
-        return Err(CoreError::DontHaveAccess.into());
+        return Err(CoreError::AccessDenied.into());
     }
 
     let notes = state
