@@ -1,5 +1,4 @@
 use crate::Block;
-use crate::errors::CoreError;
 use async_trait::async_trait;
 use sqlx::types::Json;
 use uuid::Uuid;
