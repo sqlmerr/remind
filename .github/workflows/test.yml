@@ -14,6 +14,9 @@ jobs:
         with:
           toolchain: ${{ matrix.rust-version }}
 
+      - name: Prepare .env
+        run: cp .env.example .env
+
       - name: Run docker compose
         run: docker compose up db --build -d
 
