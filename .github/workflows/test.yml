@@ -20,6 +20,9 @@ jobs:
       - name: Run docker compose
         run: docker compose up db --build -d
 
+      - name: Apply migrations
+        run: sqlx migrate run
+
       - name: Run tests with Cargo
         run: cargo test --verbose -- --test-threads=1 --nocapture > TestResults-${{ matrix.rust-version }}.txt
 
