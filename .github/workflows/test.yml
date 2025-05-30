@@ -27,7 +27,7 @@ jobs:
         run: sqlx migrate run
 
       - name: Run tests with Cargo
-        run: cargo test --verbose -- --test-threads=1 --nocapture -D warnings > TestResults-${{ matrix.rust-version }}.txt
+        run: cargo test --verbose -- --test-threads=1 --nocapture > TestResults-${{ matrix.rust-version }}.txt
 
       - name: Stop docker compose
         run: docker compose down
