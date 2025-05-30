@@ -21,6 +21,10 @@ impl BlockType {
             BlockType::Code => "Code",
         }
     }
+
+    pub fn is_matching_content_type(&self, content: &BlockContent) -> bool {
+        self.as_str() == content.as_str()
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -47,11 +51,23 @@ pub struct CodeContent {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(untagged)]
 pub enum BlockContent {
     PlainText(PlainTextContent),
     Checkbox(CheckboxContent),
     Image(ImageContent),
     Code(CodeContent),
+}
+
+impl BlockContent {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            BlockContent::PlainText(_) => "PlainText",
+            BlockContent::Checkbox(_) => "Checkbox",
+            BlockContent::Image(_) => "Image",
+            BlockContent::Code(_) => "Code",
+        }
+    }
 }
 
 #[derive(Clone, Debug)]

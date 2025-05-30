@@ -40,6 +40,7 @@ impl IntoResponse for ApiError {
                 CoreError::NotFound => (StatusCode::NOT_FOUND, msg),
                 CoreError::TooManyWorkspaces => (StatusCode::FORBIDDEN, msg),
                 CoreError::AccessDenied => (StatusCode::FORBIDDEN, msg),
+                CoreError::BlockTypeNotMatches => (StatusCode::BAD_REQUEST, msg),
             },
             Self::ValidationError(_) => (
                 StatusCode::BAD_REQUEST,

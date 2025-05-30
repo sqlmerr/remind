@@ -7,6 +7,7 @@ pub struct BlockDTO {
     pub block_type: BlockType,
     pub content: BlockContent,
     pub position: i32,
+    pub note_id: Uuid,
 }
 
 impl From<Block> for BlockDTO {
@@ -16,6 +17,7 @@ impl From<Block> for BlockDTO {
             block_type: value.block_type,
             content: value.content,
             position: value.position,
+            note_id: value.note_id,
         }
     }
 }
@@ -25,4 +27,11 @@ pub struct BlockCreateDTO {
     pub block_type: BlockType,
     pub content: BlockContent,
     pub note_id: Uuid,
+}
+
+#[derive(Clone, Debug)]
+pub struct BlockUpdateDTO {
+    pub id: Uuid,
+    pub block_type: Option<BlockType>,
+    pub content: Option<BlockContent>,
 }

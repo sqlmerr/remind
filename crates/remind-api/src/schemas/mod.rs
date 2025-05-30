@@ -16,3 +16,14 @@ impl<T: Serialize> Serialize for DataResponseSchema<T> {
         state.end()
     }
 }
+
+#[derive(Serialize)]
+pub struct OkResponseSchema {
+    pub ok: bool,
+}
+
+impl OkResponseSchema {
+    pub fn new(ok: bool) -> Self {
+        Self { ok }
+    }
+}

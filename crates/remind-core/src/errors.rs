@@ -15,6 +15,8 @@ pub enum CoreError {
     TooManyWorkspaces,
     #[error("You don't have access to do it")]
     AccessDenied,
+    #[error("Block type must be matching block content type")]
+    BlockTypeNotMatches,
 }
 
 pub type Result<T> = std::result::Result<T, CoreError>;

@@ -1,4 +1,4 @@
-use remind_core::{BlockContent, BlockCreateDTO, BlockDTO, BlockType};
+use remind_core::{BlockContent, BlockCreateDTO, BlockDTO, BlockType, BlockUpdateDTO};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -36,4 +36,10 @@ impl From<CreateBlockSchema> for BlockCreateDTO {
             note_id: value.note_id,
         }
     }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct UpdateBlockSchema {
+    pub block_type: Option<BlockType>,
+    pub content: Option<BlockContent>,
 }
