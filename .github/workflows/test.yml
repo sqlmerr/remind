@@ -1,0 +1,30 @@
+name: test.yml
+on: [push, workflow_dispatch]
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        rust_version: ["stable", "beta", "nightly"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.rust-version }}
+
+      - name: Run docker compose
+        run: docker compose up db --build -d
+
+      - name: Run tests with Cargo
+        run: cargo test --verbose -- --test-threads=1 --nocapture > TestResults-${{ matrix.rust-version }}.txt
+
+      - name: Stop docker compose
+        run: docker compose down
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: Rust-results-${{ matrix.rust-version }}
+          path: ./TestResults-${{ matrix.rust-version }}.txt
