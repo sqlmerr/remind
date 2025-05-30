@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use remind_core::{Workspace, WorkspaceRepo, WorkspaceRepository, WorkspaceService};
 use sqlx::PgPool;
 use uuid::Uuid;

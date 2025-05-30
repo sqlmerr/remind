@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use remind_core::{BlockRepository, BlockService, PgPool};
 
 pub fn create_block_repo(pool: PgPool) -> BlockRepository {

@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::fixtures::block::create_block_repo;
 use remind_core::{BlockRepository, NoteRepository, NoteService, PgPool};
 

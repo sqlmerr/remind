@@ -1,3 +1,5 @@
+#![allow(unused_imports)]
+
 mod block;
 mod note;
 mod user;

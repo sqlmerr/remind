@@ -1,8 +1,6 @@
 mod fixtures;
 
-use crate::fixtures::{
-    create_user_fixture, create_user_repository, create_user_service, create_workspace_service,
-};
+use crate::fixtures::{create_user_fixture, create_user_repository, create_workspace_service};
 use remind_core::WorkspaceCreateDTO;
 use sqlx::PgPool;
 use uuid::Uuid;

@@ -2,9 +2,7 @@ mod fixtures;
 
 use crate::fixtures::{create_user_fixture, create_user_repository, create_user_service};
 use remind_auth::{DecodingKey, EncodingKey, JwtProcessor};
-use remind_core::{
-    UserCreateDTO, UserLoginEmailDTO, UserLoginUsernameDTO, UserRepo, UserRepository, UserService,
-};
+use remind_core::{UserCreateDTO, UserLoginEmailDTO, UserLoginUsernameDTO, UserService};
 use sqlx::PgPool;
 
 #[sqlx::test(migrations = "../../migrations")]

@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use remind_auth::{DecodingKey, EncodingKey, JwtProcessor, hash_password};
 use remind_core::{PgPool, User, UserRepo, UserRepository, UserService};
 use uuid::Uuid;
