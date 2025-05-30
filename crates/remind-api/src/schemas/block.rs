@@ -1,4 +1,4 @@
-use remind_core::{BlockContent, BlockCreateDTO, BlockDTO, BlockType, BlockUpdateDTO};
+use remind_core::{BlockContent, BlockCreateDTO, BlockDTO, BlockType};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 

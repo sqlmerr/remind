@@ -1,11 +1,9 @@
 use crate::errors::Result;
 use crate::schemas::OkResponseSchema;
-use crate::schemas::block::UpdateBlockSchema;
 use crate::schemas::note::{CreateNoteSchema, NoteSchema};
 use crate::state::AppState;
 use axum::extract::{Path, State};
-use axum::http::StatusCode;
-use axum::routing::{delete, get, post, put};
+use axum::routing::{delete, post};
 use axum::{Json, Router};
 use uuid::Uuid;
 

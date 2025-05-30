@@ -21,6 +21,10 @@ impl<R: BlockRepo> BlockService<R> {
             position = current_blocks.last().unwrap().position + 1
         }
 
+        if !data.block_type.is_matching_content_type(&data.content) {
+            return Err(CoreError::BlockTypeNotMatches);
+        }
+
         let id = Uuid::new_v4();
         let block = Block {
             id,
