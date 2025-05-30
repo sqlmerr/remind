@@ -20,6 +20,9 @@ jobs:
       - name: Run docker compose
         run: docker compose up db --build -d
 
+      - name: Install sqlx cli
+        run: cargo install sqlx-cli
+
       - name: Apply migrations
         run: sqlx migrate run
 
