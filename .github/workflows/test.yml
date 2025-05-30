@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        rust_version: ["stable", "nightly"]
+        rust-version: ["stable", "nightly"]
     steps:
       - uses: actions/checkout@v4
 
