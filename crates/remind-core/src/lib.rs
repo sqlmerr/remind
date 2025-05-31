@@ -5,7 +5,7 @@ pub(crate) mod repositories;
 pub(crate) mod services;
 
 pub use dto::{block::*, note::*, user::*, workspace::*};
-pub use entities::{block::*, note::Note, user::User, workspace::Workspace};
+pub use entities::{block::*, note::*, user::User, workspace::Workspace};
 pub use remind_auth;
 pub use repositories::{block::*, note::*, user::*, workspace::*};
 pub use services::{

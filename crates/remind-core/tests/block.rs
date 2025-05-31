@@ -18,6 +18,7 @@ async fn create_note(pool: PgPool) -> NoteDTO {
     let dto = NoteCreateDTO {
         title: "Note".to_string(),
         workspace_id: workspace.id,
+        parent_note: None,
     };
     let note = service.create(dto.clone()).await.unwrap();
     note

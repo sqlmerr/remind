@@ -1,3 +1,4 @@
+use crate::entities::note::NoteIconType;
 use crate::errors::{CoreError, Result};
 use crate::{BlockDTO, BlockRepo, Note, NoteCreateDTO, NoteDTO, NoteRepo};
 use uuid::Uuid;
@@ -14,11 +15,21 @@ impl<R: NoteRepo, B: BlockRepo> NoteService<R, B> {
     }
 
     pub async fn create(&self, data: NoteCreateDTO) -> Result<NoteDTO> {
+        if let Some(parent_note_id) = data.parent_note {
+            let parent_note = self.repo.find_one(parent_note_id).await?;
+            if parent_note.is_none() {
+                return Err(CoreError::NotFound);
+            }
+        }
+
         let id = Uuid::new_v4();
         let note = Note {
             id,
             title: data.title,
+            icon_type: NoteIconType::Emoji,
+            icon_data: "📦".to_string(),
             workspace_id: data.workspace_id,
+            parent_note: data.parent_note,
         };
         self.repo.create(note).await?;
         let dto = self.find_one(id).await?;
@@ -41,7 +52,10 @@ impl<R: NoteRepo, B: BlockRepo> NoteService<R, B> {
         let dto = NoteDTO {
             id: note.id,
             title: note.title,
+            icon_type: note.icon_type,
+            icon_data: note.icon_data,
             workspace_id: note.workspace_id,
+            parent_note: note.parent_note,
             blocks,
         };
 
@@ -65,7 +79,10 @@ impl<R: NoteRepo, B: BlockRepo> NoteService<R, B> {
             let dto = NoteDTO {
                 id: note.id,
                 title: note.title,
+                icon_type: note.icon_type,
+                icon_data: note.icon_data,
                 workspace_id: note.workspace_id,
+                parent_note: note.parent_note,
                 blocks,
             };
             dtos.push(dto)

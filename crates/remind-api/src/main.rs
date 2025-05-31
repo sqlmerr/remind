@@ -8,10 +8,12 @@ pub mod utils;
 use crate::config::Config;
 use crate::state::AppState;
 use axum::extract::Request;
+use axum::http::HeaderValue;
 use axum::routing::get;
-use axum::{Json, Router};
+use axum::{Json, Router, http};
 use remind_core::PgPoolOptions;
 use serde_json::json;
+use tower_http::cors::{AllowOrigin, Any, CorsLayer};
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -38,8 +40,27 @@ async fn main() {
         .unwrap();
 
     let state = AppState::new(db_pool, config);
-
+    let cors = CorsLayer::new()
+        .allow_methods([
+            http::Method::GET,
+            http::Method::POST,
+            http::Method::PUT,
+            http::Method::DELETE,
+            http::Method::OPTIONS,
+        ])
+        .allow_origin("http://localhost:3000".parse::<HeaderValue>().unwrap())
+        .allow_headers([http::header::CONTENT_TYPE, http::header::AUTHORIZATION])
+        .allow_credentials(false);
     let router = Router::new()
+        .route(
+            "/",
+            get(|| async { Json(json!({"message": "Hello, world!", "ok": true})) }),
+        )
+        .nest("/auth", routes::auth::router(state.clone()))
+        .nest("/workspaces", routes::workspace::router(state.clone()))
+        .nest("/notes", routes::note::router(state.clone()))
+        .nest("/blocks", routes::block::router(state.clone()))
+        .fallback(routes::handler_404)
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
                 let matched_path = request
@@ -55,15 +76,7 @@ async fn main() {
                 )
             }),
         )
-        .route(
-            "/",
-            get(|| async { Json(json!({"message": "Hello, world!", "ok": true})) }),
-        )
-        .nest("/auth", routes::auth::router(state.clone()))
-        .nest("/workspaces", routes::workspace::router(state.clone()))
-        .nest("/notes", routes::note::router(state.clone()))
-        .nest("/blocks", routes::block::router(state.clone()))
-        .fallback(routes::handler_404)
+        .layer(cors)
         .with_state(state);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8000").await.unwrap();

@@ -18,6 +18,7 @@ async fn test_create_note(pool: PgPool) {
     let dto = NoteCreateDTO {
         title: "Note".to_string(),
         workspace_id: workspace.id,
+        parent_note: None,
     };
     let note = service.create(dto.clone()).await.unwrap();
     assert_eq!(note.title, dto.title);
@@ -35,6 +36,7 @@ async fn test_find_one_note(pool: PgPool) {
     let dto = NoteCreateDTO {
         title: "Note".to_string(),
         workspace_id: workspace.id,
+        parent_note: None,
     };
     let note = service.create(dto.clone()).await.unwrap();
     let note_found = service.find_one(note.id).await.unwrap();
@@ -55,6 +57,7 @@ async fn test_get_all_notes_in_workspace(pool: PgPool) {
         .create(NoteCreateDTO {
             title: "Note1".to_string(),
             workspace_id: workspace.id,
+            parent_note: None,
         })
         .await
         .unwrap();
@@ -62,6 +65,7 @@ async fn test_get_all_notes_in_workspace(pool: PgPool) {
         .create(NoteCreateDTO {
             title: "Note2".to_string(),
             workspace_id: workspace.id,
+            parent_note: None,
         })
         .await
         .unwrap();
@@ -69,6 +73,7 @@ async fn test_get_all_notes_in_workspace(pool: PgPool) {
         .create(NoteCreateDTO {
             title: "Note3".to_string(),
             workspace_id: workspace.id,
+            parent_note: None,
         })
         .await
         .unwrap();
@@ -90,6 +95,7 @@ async fn test_delete_note(pool: PgPool) {
     let dto = NoteCreateDTO {
         title: "Note".to_string(),
         workspace_id: workspace.id,
+        parent_note: None,
     };
     let note = service.create(dto.clone()).await.unwrap();
 
