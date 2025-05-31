@@ -13,7 +13,7 @@ use axum::routing::get;
 use axum::{Json, Router, http};
 use remind_core::PgPoolOptions;
 use serde_json::json;
-use tower_http::cors::{AllowOrigin, Any, CorsLayer};
+use tower_http::cors::CorsLayer;
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
