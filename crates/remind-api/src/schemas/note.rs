@@ -1,5 +1,5 @@
 use crate::schemas::block::BlockSchema;
-use remind_core::{NoteCreateDTO, NoteDTO, NoteIconType};
+use remind_core::{NoteCreateDTO, NoteDTO, NoteIconType, NoteUpdateDTO};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -55,4 +55,20 @@ impl From<CreateNoteSchema> for NoteCreateDTO {
             parent_note: value.parent,
         }
     }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct UpdateNoteSchema {
+    pub title: Option<String>,
+}
+
+impl From<UpdateNoteSchema> for NoteUpdateDTO {
+    fn from(value: UpdateNoteSchema) -> Self {
+        Self { title: value.title }
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct ReorderNoteBlocksSchema {
+    pub blocks: Vec<Uuid>,
 }

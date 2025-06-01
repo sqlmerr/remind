@@ -3,7 +3,7 @@ use crate::schemas::OkResponseSchema;
 use crate::schemas::block::{BlockSchema, CreateBlockSchema, UpdateBlockSchema};
 use crate::state::AppState;
 use axum::extract::{Path, State};
-use axum::routing::{post, put};
+use axum::routing::{delete, post, put};
 use axum::{Extension, Json, Router};
 use remind_core::errors::CoreError;
 use remind_core::{BlockUpdateDTO, UserDTO};
@@ -13,6 +13,7 @@ pub(crate) fn router(state: AppState) -> Router<AppState> {
     Router::new()
         .route("/", post(add_block))
         .route("/{id}", put(update_block))
+        .route("/{id}", delete(delete_block))
         .layer(axum::middleware::from_fn_with_state(
             state,
             super::auth_middleware,
@@ -52,5 +53,21 @@ async fn update_block(
         content: data.content,
     };
     state.block_service.update(dto).await?;
+    Ok(Json(OkResponseSchema::new(true)))
+}
+
+async fn delete_block(
+    State(state): State<AppState>,
+    Extension(user): Extension<UserDTO>,
+    Path(id): Path<Uuid>,
+) -> Result<Json<OkResponseSchema>> {
+    let block = state.block_service.find_one(id).await?;
+    let note = state.note_service.find_one(block.note_id).await?;
+    let workspace = state.workspace_service.get(note.workspace_id).await?;
+    if workspace.user_id != user.id {
+        return Err(CoreError::AccessDenied.into());
+    }
+
+    state.block_service.delete(id).await?;
     Ok(Json(OkResponseSchema::new(true)))
 }

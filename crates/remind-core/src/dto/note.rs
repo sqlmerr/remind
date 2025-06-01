@@ -19,3 +19,9 @@ pub struct NoteCreateDTO {
     pub workspace_id: Uuid,
     pub parent_note: Option<Uuid>,
 }
+
+#[derive(Clone, Debug)]
+pub struct NoteUpdateDTO {
+    pub title: Option<String>,
+    // pub parent_note: Option<Uuid>
+}

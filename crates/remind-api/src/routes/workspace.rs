@@ -14,6 +14,7 @@ pub(crate) fn router(state: AppState) -> Router<AppState> {
     Router::new()
         .route("/", post(create_workspace))
         .route("/my", get(get_my_workspaces))
+        .route("/my/{id}", get(get_my_workspace))
         .route("/my/{id}/notes", get(get_my_workspace_notes))
         .layer(axum::middleware::from_fn_with_state(
             state,
@@ -49,6 +50,19 @@ async fn get_my_workspaces(
         .collect();
 
     Ok(Json(DataResponseSchema(workspaces)))
+}
+
+async fn get_my_workspace(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+    Extension(user): Extension<UserDTO>,
+) -> Result<Json<WorkspaceSchema>> {
+    let workspace = state.workspace_service.get(id).await?;
+    if workspace.user_id != user.id {
+        return Err(CoreError::NotFound.into());
+    }
+
+    Ok(Json(workspace.into()))
 }
 
 async fn get_my_workspace_notes(

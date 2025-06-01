@@ -10,10 +10,15 @@ export interface Note {
   };
   workspace_id: UUID;
   blocks: Block[];
+  parent: UUID | null;
 }
 
 export interface CreateNote {
   title: string;
-  workspace_id: UUID;
-  parent: UUID | null;
+  workspace_id: UUID | string;
+  parent: UUID | string | null;
+}
+
+export interface UpdateNote {
+  title: string | null;
 }

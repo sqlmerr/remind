@@ -1,6 +1,6 @@
 use crate::entities::note::NoteIconType;
 use crate::errors::{CoreError, Result};
-use crate::{BlockDTO, BlockRepo, Note, NoteCreateDTO, NoteDTO, NoteRepo};
+use crate::{Block, BlockDTO, BlockRepo, Note, NoteCreateDTO, NoteDTO, NoteRepo, NoteUpdateDTO};
 use uuid::Uuid;
 
 #[derive(Clone)]
@@ -93,5 +93,49 @@ impl<R: NoteRepo, B: BlockRepo> NoteService<R, B> {
 
     pub async fn delete(&self, id: Uuid) -> Result<()> {
         self.repo.delete(id).await
+    }
+
+    pub async fn update(&self, id: Uuid, data: NoteUpdateDTO) -> Result<()> {
+        let mut note = match self.repo.find_one(id).await? {
+            None => return Err(CoreError::NotFound),
+            Some(n) => n,
+        };
+
+        if let Some(title) = data.title {
+            note.title = title;
+        };
+
+        self.repo.save(note).await
+    }
+
+    pub async fn reorder_blocks(&self, id: Uuid, blocks: Vec<Uuid>) -> Result<()> {
+        let note_blocks = self.block_repo.find_all_in_note(id).await?;
+        for b in note_blocks.clone() {
+            if !blocks.contains(&b.id) {
+                return Err(CoreError::ServerError);
+            }
+        }
+
+        let mut new = Vec::new();
+        for b in note_blocks {
+            let position = match blocks.iter().position(|&i| i == b.id) {
+                None => continue,
+                Some(p) => p,
+            };
+            let block = Block {
+                id: b.id,
+                block_type: b.block_type,
+                content: b.content,
+                note_id: b.note_id,
+                position: position as i32,
+            };
+            new.push(block);
+        }
+
+        for new_block in new {
+            self.block_repo.save(new_block).await?;
+        }
+
+        Ok(())
     }
 }

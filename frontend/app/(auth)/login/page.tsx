@@ -119,24 +119,30 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
+          <CardTitle className="text-2xl font-bold text-center text-gray-900 dark:text-gray-100">
             Sign in to your account
           </CardTitle>
-          <CardDescription className="text-center">
+          <CardDescription className="text-center text-gray-600 dark:text-gray-400">
             Choose your preferred login method
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="email" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="email" className="flex items-center gap-2">
+            <TabsList className="grid w-full grid-cols-2 bg-gray-100 dark:bg-gray-800">
+              <TabsTrigger
+                value="email"
+                className="flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-950"
+              >
                 <Mail className="h-4 w-4" />
                 Email
               </TabsTrigger>
-              <TabsTrigger value="username" className="flex items-center gap-2">
+              <TabsTrigger
+                value="username"
+                className="flex items-center gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-950"
+              >
                 <UserIcon className="h-4 w-4" />
                 Username
               </TabsTrigger>
@@ -145,7 +151,12 @@ export default function LoginPage() {
             <TabsContent value="email" className="space-y-4 mt-4">
               <form onSubmit={handleEmailLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label
+                    htmlFor="email"
+                    className="text-gray-700 dark:text-gray-300"
+                  >
+                    Email
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -176,11 +187,12 @@ export default function LoginPage() {
                     }
                     required
                     disabled={loginMutation.isPending}
+                    className="bg-white dark:bg-gray-950 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400"
                   />
                 </div>
                 <Button
                   type="submit"
-                  className="w-full"
+                  className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending ? (
@@ -198,7 +210,12 @@ export default function LoginPage() {
             <TabsContent value="username" className="space-y-4 mt-4">
               <form onSubmit={handleUsernameLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="username">Username</Label>
+                  <Label
+                    htmlFor="username"
+                    className="text-gray-700 dark:text-gray-300"
+                  >
+                    Username
+                  </Label>
                   <Input
                     id="username"
                     type="text"
@@ -212,10 +229,16 @@ export default function LoginPage() {
                     }
                     required
                     disabled={loginMutation.isPending}
+                    className="bg-white dark:bg-gray-950 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="username-password">Password</Label>
+                  <Label
+                    htmlFor="username-password"
+                    className="text-gray-700 dark:text-gray-300"
+                  >
+                    Password
+                  </Label>
                   <Input
                     id="username-password"
                     type="password"
@@ -229,11 +252,12 @@ export default function LoginPage() {
                     }
                     required
                     disabled={loginMutation.isPending}
+                    className="bg-white dark:bg-gray-950 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400"
                   />
                 </div>
                 <Button
                   type="submit"
-                  className="w-full"
+                  className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending ? (
@@ -250,8 +274,11 @@ export default function LoginPage() {
           </Tabs>
 
           {loginMutation.isError && (
-            <Alert variant="destructive" className="mt-4">
-              <AlertDescription>
+            <Alert
+              variant="destructive"
+              className="mt-4 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950"
+            >
+              <AlertDescription className="text-red-800 dark:text-red-200">
                 {loginMutation.error?.message ||
                   "An error occurred during login"}
               </AlertDescription>
@@ -259,11 +286,11 @@ export default function LoginPage() {
           )}
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <div className="text-sm text-center text-gray-600">
+          <div className="text-sm text-center text-gray-600 dark:text-gray-400">
             Don't have an account?{" "}
             <a
               href="/signup"
-              className="font-medium text-blue-600 hover:text-blue-500"
+              className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
             >
               Sign up
             </a>
@@ -271,7 +298,7 @@ export default function LoginPage() {
           <div className="text-sm text-center">
             <a
               href="/forgot-password"
-              className="font-medium text-blue-600 hover:text-blue-500"
+              className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
             >
               Forgot your password?
             </a>

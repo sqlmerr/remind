@@ -8,6 +8,7 @@ pub struct BlockSchema {
     pub block_type: BlockType,
     pub content: BlockContent,
     pub position: i32,
+    pub note_id: Uuid,
 }
 
 impl From<BlockDTO> for BlockSchema {
@@ -17,6 +18,7 @@ impl From<BlockDTO> for BlockSchema {
             block_type: value.block_type,
             content: value.content,
             position: value.position,
+            note_id: value.note_id,
         }
     }
 }

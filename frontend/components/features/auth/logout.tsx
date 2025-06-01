@@ -12,7 +12,12 @@ export default function LogoutButton() {
   };
 
   return (
-    <Button variant="outline" size="sm" onClick={handleLogout}>
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={handleLogout}
+      className="border-gray-300 dark:border-gray-700"
+    >
       <LogOut className="h-4 w-4 mr-2" />
       Logout
     </Button>

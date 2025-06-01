@@ -23,6 +23,11 @@ impl BlockType {
     }
 
     pub fn is_matching_content_type(&self, content: &BlockContent) -> bool {
+        println!(
+            "checking if matching: {} and {}",
+            self.as_str(),
+            content.as_str()
+        );
         self.as_str() == content.as_str()
     }
 }
@@ -35,7 +40,7 @@ pub struct PlainTextContent {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CheckboxContent {
     pub text: String,
-    pub status: String,
+    pub status: bool,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -51,7 +56,7 @@ pub struct CodeContent {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(untagged)]
+#[serde(tag = "type")]
 pub enum BlockContent {
     PlainText(PlainTextContent),
     Checkbox(CheckboxContent),
